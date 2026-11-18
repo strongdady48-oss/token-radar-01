@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Launch Radar — which protocol launches next, and what it is worth</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div>
+      <p class="kicker">TOKEN LAUNCH RADAR</p>
+      <h1>Which protocol launches next — and what it is worth</h1>
+      <p class="sub" id="meta-line">Loading the sealed snapshot…</p>
+    </div>
+    <div class="legend">
+      <span><i class="dot pre"></i> pre-token, ranked</span>
+      <span><i class="dot live"></i> token already trading</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="controls" aria-label="Board controls">
+    <label>Search <input id="q" type="search" placeholder="protocol name or slug…" autocomplete="off"></label>
+    <label>Category
+      <select id="cat"><option value="">All categories</option></select>
+    </label>
+    <label>Chain
+      <select id="chain"><option value="">All chains</option></select>
+    </label>
+    <label>Sort by
+      <select id="sort">
+        <option value="rank">Rank (implied value)</option>
+        <option value="tvl">TVL</option>
+        <option value="growth">7-day growth</option>
+        <option value="age">Oldest listed</option>
+        <option value="name">Name A–Z</option>
+      </select>
+    </label>
+    <label class="check"><input id="watch-only" type="checkbox"> Watchlist only (40)</label>
+    <p class="count" id="count"></p>
+  </section>
+
+  <section id="detail" class="detail" hidden></section>
+
+  <section>
+    <table id="board">
+      <thead>
+        <tr>
+          <th class="num">#</th><th>Protocol</th><th>Category</th><th>Chains</th>
+          <th class="num">TVL</th><th class="num">7-day</th><th class="num">Implied value</th><th>Launch read</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="note" id="board-note"></p>
+  </section>
+
+  <section class="live">
+    <h2>Already trading — not ranked</h2>
+    <p>These protocols record a token, so there is no launch left to value. They are the market the model learns from: their market-cap per TVL dollar sets each category's multiple. Showing the 60 largest by market cap.</p>
+    <table>
+      <thead>
+        <tr><th>Protocol</th><th>Category</th><th class="num">TVL</th><th class="num">Market cap</th><th class="num">MCap / TVL</th></tr>
+      </thead>
+      <tbody id="live-rows"></tbody>
+    </table>
+  </section>
+
+  <section class="method">
+    <h2>How the implied value is worked out</h2>
+    <p><strong>Implied value = TVL × category multiple × growth × age × launch plausibility.</strong></p>
+    <ul>
+      <li><strong>Category multiple</strong> — the median market-cap per TVL dollar of the protocols in the same category whose token already trades, shrunk toward the global median when a category has few live comps. The market prices a unit of TVL; the model borrows that price.</li>
+      <li><strong>Growth</strong> — the protocol's 7-day TVL change, clamped to −60%…+150%, worth 0.76×…1.60×. A week of fast growth is momentum; a collapse is a warning.</li>
+      <li><strong>Age</strong> — how long DefiLlama has tracked the protocol: 0.70× for a fresh listing, rising to 1.00× at four years. Older means a record to judge.</li>
+      <li><strong>Launch plausibility</strong> — the snapshot's own watchlist rule: 1.00× when it passes, 0.60× for a versioned deployment, 0.50× for a bridge or liquid-staking product, 0.30× for a centralised exchange, 0.25× for a wrapped or staked product of a token that already trades.</li>
+    </ul>
+    <p>No protocol name is hardcoded anywhere in the model. Every figure comes from the sealed snapshot (DefiLlama, fetched 2026-11-14). An implied value is this entry's own claim about what a launch would be worth if the protocol's record stayed as it is — it is not a prediction that a token will be issued, or when.</p>
+    <p class="fine">“Records no token” means DefiLlama's record carries no token for the protocol, not that it has none: a protocol on the board may still have a token its record does not carry. Farm steps are a reader's plan, not financial advice — never deposit more than you can afford to lose.</p>
+  </section>
+</main>
+
+<footer>
+  <p>Token Launch Radar · data: DefiLlama protocols snapshot, sealed 2026-11-14 · values are the entry's own model, not a market price.</p>
+</footer>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
